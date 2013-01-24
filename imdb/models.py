@@ -45,7 +45,12 @@ class Actor(object):
         self._description = description
 
     def _load_full(self):
-        (self.films, self.photo, self.description) = full_actor(self)
+        fullinfo = full_actor(self)
+
+        self.films = fullinfo['films']
+        self.description = fullinfo['description']
+        self.photo = fullinfo['image']
+
         return self
 
 

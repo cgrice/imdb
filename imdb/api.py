@@ -1,11 +1,17 @@
 from .models import Actor, Film
 
+import requests
+import urllib
+
 def actor(name, **kwargs):
 
+    response = _person(name)
+
     actor = Actor()
-    actor.name = 'Christoph Waltz'
-    actor.picture = 'http://placekitten.com/200/300'
-    actor.imbd_id = 'nm11312415'
+    actor.imdb_id = response['id']
+    actor.name = response['name']
+    actor.short_desc = response['description']
+
     return actor
 
 
@@ -15,8 +21,27 @@ def film(name, **kwargs):
     return film
 
 
-def _request(name, type):
-    """
-    http://www.imdb.com/xml/find?json=1&nr=1&nm=on&q=christoph%20waltz
-    http://www.imdb.com/xml/find?json=1&nr=1&tt=on&q=lost
-    """
+def _person(name):
+    response = _request("http://www.imdb.com/xml/find?json=1&nr=1&nm=on&q=", name)
+
+    if 'name_popular' in response:
+        person = response['name_popular'][0]
+    elif 'name_exact' in response:
+        person = response['name_exact'][0]
+    elif 'name_approx' in response:
+        person = response['name_approx'][0]
+    else:
+        person = False
+
+    return person
+
+
+def _work(name):
+    response = _request("http://www.imdb.com/xml/find?json=1&nr=1&tt=on&q=", name)
+
+
+
+def _request(base_url, name):
+    result = requests.get(base_url + urllib.quote_plus(name))
+    return result.json()
+
