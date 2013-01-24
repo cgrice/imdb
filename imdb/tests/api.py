@@ -14,12 +14,19 @@ class TestActor(unittest.TestCase):
         except AttributeError as e:
             self.fail('Not returning correct actor model: %s' % e)
 
+    def testGetActor(self):
+        actor = imdb.actor('Christoph Waltz')
+
+        self.assertEqual(actor.imdb_id, 'nm0910607')
+        self.assertEqual(actor.name, 'Christoph Waltz')
+
+
     def testLazyLoading(self):
         actor = imdb.actor('Christoph Waltz')
 
         try:
             films = actor.films
-        except AttributeError:
+        except AttributeError as e:
             self.fail('Has no films attribute')
 
         self.assertNotEquals(films, None)
