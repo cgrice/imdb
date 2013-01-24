@@ -45,6 +45,51 @@ class TestActor(unittest.TestCase):
 
         self.assertNotEquals(description, None)
 
+
+class TestFilm(unittest.TestCase):
+
+    def testInit(self):
+        film = imdb.film('La Dolce Vita')
+
+        try:
+            imdb_id = film.imdb_id
+            short_desc = film.short_desc
+            name = film.name
+        except AttributeError as e:
+            self.fail('Not returning correct film model: %s' % e)
+
+    def testGetActor(self):
+        film = imdb.film('La Dolce Vita')
+
+        self.assertEqual(film.imdb_id, 'tt0053779')
+        self.assertEqual(film.name, 'La Dolce Vita')
+
+
+    def testLazyLoading(self):
+        film = imdb.film('La Dolce Vita')
+
+        try:
+            films = film.films
+        except AttributeError as e:
+            self.fail('Has no films attribute')
+
+        self.assertNotEquals(films, None)
+
+        try:
+            photo = film.photo
+        except AttributeError:
+            self.fail('Has no photo attribute')
+
+        self.assertNotEquals(photo, None)
+
+        try:
+            description = film.description
+        except AttributeError:
+            self.fail('Has no description attribute')
+
+        self.assertNotEquals(description, None)
+
+
 if __name__ == "__main__":
     unittest.main()
 

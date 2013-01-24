@@ -17,6 +17,7 @@ def actor(name, **kwargs):
 
 def film(name, **kwargs):
 
+    response = _work(name)
     film = Film()
     return film
 
