@@ -20,6 +20,11 @@ class TestActor(unittest.TestCase):
         self.assertEqual(actor.imdb_id, 'nm0910607')
         self.assertEqual(actor.name, 'Christoph Waltz')
 
+    def testAutoCorrect(self):
+
+        actor = imdb.actor('Tom Cruize')
+        self.assertEqual(actor.name, 'Tom Cruise')
+
 
     def testLazyLoading(self):
         actor = imdb.actor('Christoph Waltz')
@@ -44,6 +49,10 @@ class TestActor(unittest.TestCase):
             self.fail('Has no description attribute')
 
         self.assertNotEquals(description, None)
+
+    def testNonExistent(self):
+        actor = imdb.actor('a123asXZasdas')
+        self.assertFalse(actor, 'Nonsense films should return False.')
 
 
 class TestFilm(unittest.TestCase):
@@ -73,7 +82,9 @@ class TestFilm(unittest.TestCase):
         except AttributeError as e:
             self.fail('Has no actors attribute')
 
-        self.assertNotEquals(actors, None)
+        self.assertNotEquals(actors, None, 'Actors attribute not set correctly')
+        self.assertNotEquals(actors, False, 'Actors attribute set to False')
+        self.assertNotEquals(len(actors), 0, 'Actors attribute set to empty list')
 
         try:
             poster = film.poster
@@ -81,6 +92,7 @@ class TestFilm(unittest.TestCase):
             self.fail('Has no poster attribute')
 
         self.assertNotEquals(poster, None)
+        self.assertNotEquals(poster, False)
 
         try:
             description = film.description
@@ -88,7 +100,17 @@ class TestFilm(unittest.TestCase):
             self.fail('Has no description attribute')
 
         self.assertNotEquals(description, None)
+        self.assertNotEquals(description, False)
 
+
+    def testAutoCorrect(self):
+
+        film = imdb.film('La Dulce Vite')
+        self.assertEqual(film.name, 'La Dolce Vita')
+
+    def testNonExistent(self):
+        film = imdb.film('a123asXZasdas')
+        self.assertFalse(film, 'Nonsense films should return False.')
 
 if __name__ == "__main__":
     unittest.main()
