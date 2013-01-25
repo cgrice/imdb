@@ -7,22 +7,30 @@ def actor(name, **kwargs):
 
     response = _person(name)
 
-    actor = Actor()
-    actor.imdb_id = response['id']
-    actor.name = response['name']
-    actor.short_desc = response['description']
-
+    if response:
+        actor = Actor()
+        actor.imdb_id = response['id']
+        actor.name = response['name']
+        actor.short_desc = response['description']
+    else:
+        actor = False
+        
     return actor
 
 
 def film(name, **kwargs):
 
+
     response = _work(name)
 
-    film = Film()
-    film.imdb_id = response['id']
-    film.name = response['title']
-    film.short_desc = response['description']
+    if response:
+        film = Film()
+        film.imdb_id = response['id']
+        film.name = response['title']
+        film.short_desc = response['description']
+    else:
+        film = False
+
     return film
 
 
