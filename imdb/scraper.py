@@ -18,12 +18,22 @@ class Scraper(object):
 
 
 	def film(self, film):
-		page = self._get_page(self._build_url('title', film))
+		try:
+			page = self._get_page(self._build_url('title', film))
+		except Exception as e:
+			return False
+
+		try:
+			title_image = self._extract_title_image(page)
+			actors = self._extract_cast(page)
+			description = self._extract_title_description(page)
+		except Exception as e:
+			return False
 
 		return {
-			'actors': False, 
-			'image': False, 
-			'description': False
+			'actors': actors, 
+			'image': title_image, 
+			'description': description
 		}
 
 	def _get_page(self, url):
@@ -57,4 +67,20 @@ class Scraper(object):
 		return films
 
 	def _extract_cast(self, page):
-		return None
+		cast = []
+
+		table = page.select(".cast_list")[0]
+		castlist = table.select('td.name a')
+		for row in castlist:
+			cast.append(row.text)
+
+		return cast
+
+	def _extract_title_image(self, page):
+		img_td = page.find(id="img_primary")
+		img_a = img_td.find('a')
+		img = img_a.find('img')
+		return img.get('src')
+
+	def _extract_title_description(self, page):
+		return page.find(itemprop="description").text
