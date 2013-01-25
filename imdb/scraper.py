@@ -19,7 +19,12 @@ class Scraper(object):
 
 	def film(self, film):
 		page = self._get_page(self._build_url('title', film))
-		return (False, False, False)
+
+		return {
+			'actors': False, 
+			'image': False, 
+			'description': False
+		}
 
 	def _get_page(self, url):
 		response = requests.get(url)
