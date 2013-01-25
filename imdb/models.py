@@ -62,21 +62,48 @@ class Film(object):
         self.imbd_id = None
 
         # Set up properties to be None ready for lazy loading
-        self.actors = None
-        self.poster = None
-        self.description = None
+        self._actors = None
+        self._poster = None
+        self._description = None
 
     @property
     def actors(self):
-        return []
+        if self._actors is None:
+            self._load_full()
+        return self._actors
+
+    @actors.setter
+    def actors(self, actors):
+        self._actors = actors
 
     @property
     def poster(self):
-        return None
+        if self._poster is None:
+            self._load_full()
+        return self._poster
+
+    @poster.setter
+    def poster(self, poster):
+        self._poster = poster
 
     @property
     def description(self):
-        return None
+        if self._description is None:
+            self._load_full()
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        self._description = description
+
+    def _load_full(self):
+        fullinfo = full_film(self)
+
+        self.actors = fullinfo['actors']
+        self.description = fullinfo['description']
+        self.poster = fullinfo['image']
+
+        return self
 
 
 def full_film(film):
