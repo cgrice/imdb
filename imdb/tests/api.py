@@ -69,18 +69,18 @@ class TestFilm(unittest.TestCase):
         film = imdb.film('La Dolce Vita')
 
         try:
-            films = film.films
+            actors = film.actors
         except AttributeError as e:
-            self.fail('Has no films attribute')
+            self.fail('Has no actors attribute')
 
-        self.assertNotEquals(films, None)
+        self.assertNotEquals(actors, None)
 
         try:
-            photo = film.photo
+            poster = film.poster
         except AttributeError:
-            self.fail('Has no photo attribute')
+            self.fail('Has no poster attribute')
 
-        self.assertNotEquals(photo, None)
+        self.assertNotEquals(poster, None)
 
         try:
             description = film.description
