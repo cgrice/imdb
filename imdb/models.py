@@ -14,6 +14,10 @@ class Actor(object):
         self._photo = None
         self._description = None
 
+
+    def __repr__(self):
+        return ('<%s: %s - %s>' % (self.imdb_id, self.name, self.short_desc))
+
     @property
     def films(self):
         if self._films is None:
@@ -65,6 +69,9 @@ class Film(object):
         self._actors = None
         self._poster = None
         self._description = None
+
+    def __repr__(self):
+        return ('<%s: %s - %s>' % (self.imdb_id, self.name, self.short_desc))
 
     @property
     def actors(self):
