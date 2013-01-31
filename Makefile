@@ -1,6 +1,6 @@
 default:
-	./run_tests
+	./test_imdb.py
 
 test:
-	coverage run --source=imdb run_tests
+	coverage run --source=imdb test_imdb.py
 	coverage html
